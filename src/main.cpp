@@ -1,21 +1,17 @@
-// demo: CAN-BUS Shield, receive data with interrupt mode
-// when in interrupt mode, the data coming can't be too fast, must >20ms, or else you can use check mode
-// loovee, 2014-6-13
-
 #include <SPI.h>
-
-#include <CAN_driver.h>
+#include "Application/monitor/Monitor.h"
+#include "config.h"
+#include "BSW/CAN_driver.h"
 
 void setup() {
     CAN_setup();
 }
 
-
+unsigned char MTBR[8];
 
 void loop() {
-    init_transmission();
+    send();
+    standby();
+    delay(5000);
 }
 
-/*********************************************************************************************************
-    END FILE
-*********************************************************************************************************/
