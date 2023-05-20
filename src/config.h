@@ -1,0 +1,1 @@
+unsigned long CAN_id = 0x00;

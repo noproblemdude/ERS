@@ -1,0 +1,5 @@
+TODOs:
+
+-Funktionen zum zuhören nach einer CAN nachricht
+-Mock Funktionen für Application layer:
+    - 
