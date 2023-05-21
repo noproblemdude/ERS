@@ -1,5 +1,17 @@
 TODOs:
 
--Funktionen zum zuhören nach einer CAN nachricht
--Mock Funktionen für Application layer:
-    - 
+-Funktionen zum treiben der CAN Hardware ERLEDIGT
+-Mock Funktionen für Application Layer: 
+    - Monitor ERLEDIGT
+-Mock Funktionen für Hardware Layer
+    -Sensor ERLEDIGT
+    -Monitor ERLEDIGT
+    -Motor ERLEDIGT
+-Port system entwerfen
+    -Process ID in der Nachricht? ERLEDIGT
+    -FUnktion in jedem ECU zum verteilen der Nachricht in dessen prozess? ERLEDIGT
+-Effizienteres speichern von "map"?
+-Kommentieren von Header ERLEDIGT
+-README schreiben
+
+

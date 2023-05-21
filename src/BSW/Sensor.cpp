@@ -19,7 +19,7 @@ void standby(){
 
 
 void measureRange(){
-    //TODO: Sensor access through sensorDriver.h for now mock values  
+    //TODO: Sensor access through sensorDriver.h .For now mock values  
     range = 30;
     degree = 90;
 }

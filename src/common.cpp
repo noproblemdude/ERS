@@ -23,3 +23,4 @@ unsigned int charToint(unsigned char *bytes){
 
     return number;
 }
+
