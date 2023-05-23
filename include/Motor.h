@@ -12,7 +12,11 @@ Triggering will happen when a can message with the relevant Processid has been r
 #include "CAN_driver.h"
 #include "common.h"
 #include "config.h"
+#include <Servo.h>
 
+
+//Setup function for the CAN Shield. Has to be called every time the ECU is booted
+void MOTOR_setup();
 
 //Waits to receive a message, once message has been received it, it triggers the distributer
 void standby();
