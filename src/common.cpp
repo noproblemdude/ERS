@@ -24,3 +24,15 @@ unsigned int charToint(unsigned char *bytes){
     return number;
 }
 
+double calculateAverage(int arr[], int size) {
+    int sum = 0;
+
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+
+    double average = static_cast<double>(sum) / size;
+    return average;
+}
+
+

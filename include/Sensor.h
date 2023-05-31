@@ -25,7 +25,7 @@ void distribute();
 void send(PROCESS_IDS Pid);
 
 //access Sensor driver and genetrate the distance of an object, if one is detected
-void measureRange(unsigned int *range);
+void measureRange();
 
 #endif
 

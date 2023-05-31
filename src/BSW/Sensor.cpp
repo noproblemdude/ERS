@@ -2,6 +2,8 @@
 #include "Sensor.h"
 
 
+const int pingPin = 7; // Trigger Pin of Ultrasonic Sensor
+const int echoPin = 6; // Echo Pin of Ultrasonic Sensor
 
 unsigned int range;
 unsigned char degree;
@@ -10,18 +12,32 @@ unsigned char sntmsg[8];
 
 
 
-void standby(){    
+void standby(){
     CAN_listen(recvmsg);
-    distribute();    
-
+    distribute();
 }
 
 
 
 void measureRange(){
-    //TODO: Sensor access through sensorDriver.h .For now mock values  
-    range = 30;
-    degree = 90;
+    int measurements[10];
+    long duration;
+    for(int i =0;i<=9;i++){
+        pinMode(pingPin, OUTPUT);
+        digitalWrite(pingPin, LOW);
+        delayMicroseconds(2);
+        digitalWrite(pingPin, HIGH);
+        delayMicroseconds(10);
+        digitalWrite(pingPin, LOW);
+        pinMode(echoPin, INPUT);
+        duration = pulseIn(echoPin, HIGH);
+        measurements[i] = duration / 29 / 2;
+        SERIAL_PORT_MONITOR.print(measurements[i]);
+        SERIAL_PORT_MONITOR.print("cm");
+        SERIAL_PORT_MONITOR.println();
+        delay(10);
+    }
+    range = round(calculateAverage(measurements,10));
 }
 
 
@@ -53,11 +69,3 @@ void distribute(){
             SERIAL_PORT_MONITOR.println("Keine gültige processid");
         }
 }
-
-
-
-
-
-
-
-
