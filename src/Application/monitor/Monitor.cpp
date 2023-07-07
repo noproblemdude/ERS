@@ -2,18 +2,18 @@
 
 
 
-void shutdown(){
+void shutdown(void){
 
 }
 
-void startup(){
+void startup(void){
 
 }
 
-void reset(){
+void reset(void){
 
 }
 
-void clear(){
+void clear(void){
     
 }

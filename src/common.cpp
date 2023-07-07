@@ -24,3 +24,15 @@ unsigned int charToint(unsigned char *bytes){
     return number;
 }
 
+
+unsigned char* extractRange(unsigned char *msg){
+
+    unsigned char output[4];
+
+    output[0] = msg[4];
+    output[1] = msg[5];
+    output[2] = msg[6];
+    output[3] = msg[7];
+
+
+}

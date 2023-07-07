@@ -9,11 +9,11 @@ char str[20];
 extern unsigned char stmp[8];
 
 
-void MCP2515_ISR() {
+void MCP2515_ISR(void) {
       flagRecv = 1;
 }
 
-void CAN_setup(){
+void CAN_setup(void){
  
 
     SERIAL_PORT_MONITOR.begin(115200);

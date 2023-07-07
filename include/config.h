@@ -13,7 +13,10 @@ const unsigned char CANid = 0;
 
 typedef enum {
     SENSOR_MEASURE,
-    MONITOR_STORERANGE,
+    MONITOR_RENDERMAP,
+    MONITOR_MOTORFEEDBACK,
+    MOTOR_MOVE
+    
 } PROCESS_IDS;
 
 #endif
