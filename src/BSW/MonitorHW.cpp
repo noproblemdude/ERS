@@ -28,14 +28,16 @@ void MONITOR_setup(void) {
 #endif
 
     Serial.print("TFT size is "); Serial.print(tft.width()); Serial.print("x"); Serial.println(tft.height());
-
+    
     tft.reset();
-
-    uint16_t identifier = tft.readID();
+    
+    uint16_t identifier = 0x9341;
 
     tft.begin(identifier);
 
     resetScreen();
+
+    tft.fillCircle(50,50,3,RED);
 
     degrees = 0;
 }
