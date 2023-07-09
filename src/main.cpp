@@ -11,6 +11,6 @@ void setup() {
 
 
 void loop() {
-    measureRange();
+    standby();
 }
 
