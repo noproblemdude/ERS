@@ -40,6 +40,11 @@ void CAN_listen(unsigned char *buffer){
         if(CAN_MSGAVAIL == CAN.checkReceive()){
             SERIAL_PORT_MONITOR.println("Nachricht empfangen");
             CAN.readMsgBuf(&len, buffer);
+
+            for (int i = 0; i < len; i++) {
+                SERIAL_PORT_MONITOR.print(buffer[i]); SERIAL_PORT_MONITOR.print("\t");
+            }
+
             break;
         }
         SERIAL_PORT_MONITOR.println("Wartet auf Nachricht");
@@ -54,6 +59,11 @@ void CAN_listen(unsigned char *buffer){
 
 
 void CAN_transmit(const byte *body){
+
+    for (int i = 0; i < len; i++) {
+                SERIAL_PORT_MONITOR.print(body[i]); SERIAL_PORT_MONITOR.print("\t");
+            }
+
     CAN.MCP_CAN::sendMsgBuf(CANid, 0, 8, body);
     SERIAL_PORT_MONITOR.println("Nachricht versendet");
 }

@@ -4,12 +4,12 @@
 
 unsigned char recvmsg[8];
 unsigned char sntmsg[8];
-static unsigned char degrees;
+static unsigned char degrees = 0;
 
 struct dataPoint
 {
-    uint8_t x;
-    uint8_t y;
+    double x;
+    double y;
 };
 
 struct dataPoint dataPoints[180];
@@ -54,12 +54,12 @@ void send(PROCESS_IDS Pid){
 }
 
 void requestMoveMotor(unsigned char deg){
-
+    
     sntmsg[7] = deg;
     degrees = deg;
     send(MOTOR_MOVE);
     standby();
-
+    
 }
 
 void requestMeasureRange(){
@@ -69,8 +69,12 @@ void requestMeasureRange(){
 
 void storerange(unsigned char deg, uint8_t range){
     
-    dataPoints[deg].x = range*cos(deg);
-    dataPoints[deg].y = range*sin(deg);
+
+
+    dataPoints[deg].x = range*(cos(degrees * (PI / 180)+PI)+2);
+    dataPoints[deg].y = range*(sin(degrees * (PI / 180)));
+    
+    Serial.print("das sind die Daten. Deg:");Serial.print(deg);Serial.print(" X :");Serial.print(dataPoints[deg].x);Serial.print(" Y:");Serial.println(dataPoints[deg].y);
 
 }
 
@@ -95,7 +99,8 @@ void RenderMap(void){
     
     if(checkOnMap(degrees)){displayMap();}
     
-    storerange(degrees,charToInt(extractRange(recvmsg)));
+    storerange(degrees,extractRange(recvmsg));
+    Serial.println(extractRange(recvmsg));
 
     tft.fillCircle(dataPoints[degrees].y,dataPoints[degrees].x,3,RED);
 

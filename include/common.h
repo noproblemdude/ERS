@@ -7,10 +7,10 @@ auxiliary functions are defined here
 #ifndef COMMON_H
 #define COMMON_H
 
-unsigned char* intTochar(unsigned int intvalue);
+void intTochar (unsigned int intvalue, unsigned char* output);
 
-unsigned int charToInt(unsigned char *bytes);
+unsigned int charToInt(unsigned char* array);
 
-unsigned char* extractRange(unsigned char *msg);
+unsigned int extractRange(unsigned char *msg);
 
 #endif
