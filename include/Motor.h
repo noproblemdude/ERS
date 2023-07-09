@@ -28,7 +28,7 @@ void distribute();
 void send(PROCESS_IDS Pid);
 
 //Accesses the feedback motor library to move the motor do desired positing as specified by the "angle" parameter 
-void movemotor(unsigned char angle);
+void moveMotor(unsigned char angle);
 
 
 #endif

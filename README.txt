@@ -24,6 +24,4 @@ Contains the Main loop file, where the execution begins after the ECU is powered
 -test:
 Unit tests (Not yet implemented)
 
-The build wont work while the source code for motor, monitor and sensor are present in the Project (like MonitorHW.h and sensor.h) 
-since they have identical functions. To build one has to remove the source files which wont be needed for the specific ECU.
-A better arrangement is to be found, per example creating one repo for each ECU.
+The project has been split in 3 branches. Each one represents the code to be uploaded to each node. This is the code for the ECU carrying the motor hardware.
