@@ -8,20 +8,17 @@
 
 
 void setup() {
-    //MONITOR_setup();
+    MONITOR_setup();
     CAN_setup();
 }
 
 
 void loop() {
 
-    sendTest();
-
-    /*
     int i;
     for(i=0; i<=180;i++){
-      RenderMap();
+      requestMoveMotor(i);
     }
-    */
+    
 }
 

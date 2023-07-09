@@ -34,11 +34,13 @@ Hardware access of the Monitor ECU.
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-
+//wipes all of the data points from the monitor
 void resetScreen(void);
 
-void RenderMap(void);
+//Draws new data point onto the screen, considering the last datapoint from that direction and if it was on one of the radar lines
+void renderMap(void);
 
+// Configures the Harware on boot
 void MONITOR_setup(void);
 
 //Waits to receive a message, once message has been received it, it triggers the distributer
@@ -50,16 +52,21 @@ void distribute(void);
 //Sends the buffered massage with the passed processID
 void send(PROCESS_IDS Pid);
 
-//requests a measurement for a given degree, should first trigger the motor and then the sensor
-void requestmeasurement(unsigned char deg);
+//Sends a request to the sensor ECU to measure the range in its current position
+void requestMeasureRange(void);
 
-//store the coordinates of the measured object into a map object
-void storerange(void);
+//Sends a request to the Motor ECU to move the motor to the position described by the deg parameter, this is called first in the main.cpp to start the routine.
+void requestMoveMotor(unsigned char deg);
 
-//take the received combination of angle and distance and calculate the coordinates of the scanned object
-void calculaterange(void);
+//Stores the data from the other ECUs into a struct
+void storeRange(unsigned char deg, uint8_t range);
 
-//periodically display radar view according to a map object
-void displaymap(void);
+//Draws the base graphics onto the monitor (radar lines)
+void displayMap(void);
+
+//takes the received message and triggers the function corresponding to the PID
+void distribute(void);
+
+
 
 #endif

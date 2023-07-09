@@ -11,13 +11,24 @@ functions that are reused by all of the other components to send/receive CAN fra
 
 #include "config.h"
 #include <SPI.h>
-//#include "mcp2515_can.h"
-#include <mcp_can.h>
+#include "mcp2515_can.h"
 
-#define CAN0_INT 53                              // Set INT to pin 2
-                               // Set CS to pin 10
 
-void sendTest();
+
+#define CAN_2515
+
+
+
+#if defined(SEEED_WIO_TERMINAL) && defined(CAN_2518FD)
+const int SPI_CS_PIN  = BCM8;
+const int CAN_INT_PIN = BCM25;
+#else
+const int SPI_CS_PIN = 9;
+const int CAN_INT_PIN = 2;
+#endif
+
+
+
 
 //Setup function for the CAN Shield. Has to be called every time the ECU is booted
 void CAN_setup(void);

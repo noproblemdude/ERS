@@ -14,7 +14,7 @@ unsigned char* intTochar (unsigned int intvalue){
 }
 
 
-unsigned int charToint(unsigned char *bytes){
+unsigned int charToInt(unsigned char *bytes){
     
     unsigned int number = (static_cast<int>(bytes[0]) << 24) |
                         (static_cast<int>(bytes[1]) << 16) |

@@ -18,7 +18,7 @@ static Elegoo_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
 
 void MONITOR_setup(void) {
-    Serial.begin(9600);
+    Serial.begin(115200);
     Serial.println(F("TFT LCD test"));
 
 #ifdef USE_Elegoo_SHIELD_PINOUT
@@ -37,8 +37,6 @@ void MONITOR_setup(void) {
 
     resetScreen();
 
-    tft.fillCircle(50,50,3,RED);
-
     degrees = 0;
 }
 
@@ -56,17 +54,17 @@ void send(PROCESS_IDS Pid){
 }
 
 void requestMoveMotor(unsigned char deg){
-    
-    sntmsg[8] = deg;
+
+    sntmsg[7] = deg;
     degrees = deg;
     send(MOTOR_MOVE);
+    standby();
 
 }
 
 void requestMeasureRange(){
-
     send(SENSOR_MEASURE);
-
+    standby();
 }
 
 void storerange(unsigned char deg, uint8_t range){
@@ -95,9 +93,9 @@ void RenderMap(void){
 
     tft.fillCircle(dataPoints[degrees].y,dataPoints[degrees].x,3,BLACK);
     
-    if(checkOnMap(degrees)){displaymap();}
+    if(checkOnMap(degrees)){displayMap();}
     
-    storerange(degrees,charToint(extractRange(recvmsg)));
+    storerange(degrees,charToInt(extractRange(recvmsg)));
 
     tft.fillCircle(dataPoints[degrees].y,dataPoints[degrees].x,3,RED);
 
@@ -114,7 +112,7 @@ void resetScreen(void){
 
 }
 
-void displaymap(void){
+void displayMap(void){
     
     tft.fillCircle(0, tft.height()/2,10,GREEN);
     tft.drawCircle(0,tft.height()/2,60,GREEN);

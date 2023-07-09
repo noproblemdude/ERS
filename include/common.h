@@ -9,7 +9,7 @@ auxiliary functions are defined here
 
 unsigned char* intTochar(unsigned int intvalue);
 
-unsigned int charToint(unsigned char *bytes);
+unsigned int charToInt(unsigned char *bytes);
 
 unsigned char* extractRange(unsigned char *msg);
 
