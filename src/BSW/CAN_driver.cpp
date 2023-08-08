@@ -2,12 +2,6 @@
 
 
 tCAN message;
-unsigned char flagRecv;
-unsigned char len;
-unsigned char buf[8];
-char str[20];
-extern unsigned char stmp[8];
-
 
 void CAN_setup(){
  
@@ -37,7 +31,7 @@ void CAN_listen(unsigned char *buffer){
     for (int i = 0; i < 7; i++) { 
             buffer[i]==message.data[i];
         }
-        
+
 }
 
 
