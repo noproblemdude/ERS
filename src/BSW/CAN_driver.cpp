@@ -1,7 +1,7 @@
 #include "CAN_driver.h"
 
 
-mcp2515_can CAN(SPI_CS_PIN);
+tCAN message;
 unsigned char flagRecv;
 unsigned char len;
 unsigned char buf[8];
@@ -9,23 +9,20 @@ char str[20];
 extern unsigned char stmp[8];
 
 
-void MCP2515_ISR() {
-      flagRecv = 1;
-}
-
 void CAN_setup(){
  
+    Serial.begin(9600);
+    Serial.println("CAN Write - Testing transmission of CAN Bus messages");
+    delay(1000);
 
-    SERIAL_PORT_MONITOR.begin(115200);
-    while (!SERIAL_PORT_MONITOR) {
-        ; // wait for serial port to connect. Needed for native USB port only
-    }
-    attachInterrupt(digitalPinToInterrupt(CAN_INT_PIN), MCP2515_ISR, FALLING); // start interrupt
-    while (CAN_OK != CAN.begin(CAN_500KBPS)) {             // init can bus : baudrate = 500k
-        SERIAL_PORT_MONITOR.println("CAN init fail, retry...");
-        delay(100);
-    }
-    SERIAL_PORT_MONITOR.println("CAN init ok!");
+    if(Canbus.init(CANSPEED_500))
+    //Initialise MCP2515 CAN controller at the specified speed
+    Serial.println("CAN Init ok");
+    
+    else
+
+    Serial.println("Can't init CAN");
+    delay(1000);
 
 
 }
@@ -34,28 +31,29 @@ void CAN_setup(){
 
 void CAN_listen(unsigned char *buffer){
 
-    unsigned int time = 0;
-
-    while(time<=1000){
-        if(CAN_MSGAVAIL == CAN.checkReceive()){
-            SERIAL_PORT_MONITOR.println("Nachricht empfangen");
-            CAN.readMsgBuf(&len, buffer);
-            break;
+    mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0),0);
+    mcp2515_get_message(&message);
+    
+    for (int i = 0; i < 7; i++) { 
+            buffer[i]==message.data[i];
         }
-        SERIAL_PORT_MONITOR.println("Wartet auf Nachricht");
-        delay(100);
-        time=time + 100;
-    }
-
-    SERIAL_PORT_MONITOR.println("Keine nachricht empfangen");
-
+        
 }
 
 
 
 void CAN_transmit(const byte *body){
-    CAN.MCP_CAN::sendMsgBuf(CANid, 0, 8, body);
-    SERIAL_PORT_MONITOR.println("Nachricht versendet");
+   
+message.id = 0; //formatted in HEX
+message.header.rtr = 0;
+message.header.length = 8; //formatted in DEC
+
+for (int i = 0; i < 7; i++) { 
+            message.data[i]==body[i];
+        }
+
+mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0),0);
+mcp2515_send_message(&message);
 }
 
 
