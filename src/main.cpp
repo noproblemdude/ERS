@@ -13,12 +13,11 @@ void setup() {
 
 
 void loop() {
-  
+
     int i;
     for(i=0; i<=180;i++){
       requestMoveMotor(i);
     }
-    
 
 }
 

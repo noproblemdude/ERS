@@ -130,9 +130,11 @@ void displayMap(void){
 void distribute(void){
     switch(recvmsg[0]) {
         case MONITOR_RENDERMAP:
+            SERIAL_PORT_MONITOR.println("Sensor Nachricht erhalten");
             RenderMap();
             break;
         case MONITOR_MOTORFEEDBACK:
+            SERIAL_PORT_MONITOR.println("Motorfeedback erhalten");
             requestMeasureRange();
             break;
         default:
