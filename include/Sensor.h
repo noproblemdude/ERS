@@ -22,7 +22,7 @@ void standby();
 void distribute();
 
 //Sends the buffered massage with the passed processID
-void send(PROCESS_IDS Pid);
+void send();
 
 //access Sensor driver and genetrate the distance of an object, if one is detected
 void measureRange();

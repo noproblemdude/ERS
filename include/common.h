@@ -7,9 +7,11 @@ auxiliary functions are defined here
 #ifndef COMMON_H
 #define COMMON_H
 
-unsigned char* intTochar(unsigned int intvalue);
+void intTochar (unsigned int intvalue, unsigned char* output);
 
-unsigned int charToint(unsigned char *bytes);
+unsigned int charToInt(unsigned char* array);
+
+unsigned int extractRange(unsigned char *msg);
 
 double calculateAverage(int arr[], int size);
 

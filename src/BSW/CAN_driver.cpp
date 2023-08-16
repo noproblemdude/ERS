@@ -5,7 +5,7 @@ tCAN message;
 
 void CAN_setup(){
  
-    Serial.begin(9600);
+    Serial.begin(115200);
     Serial.println("CAN Write - Testing transmission of CAN Bus messages");
     delay(1000);
 
@@ -29,8 +29,9 @@ void CAN_listen(unsigned char *buffer){
     mcp2515_get_message(&message);
     
     for (int i = 0; i < 7; i++) { 
-            buffer[i]==message.data[i];
+            buffer[i]=message.data[i];
         }
+
 
 }
 
@@ -38,16 +39,19 @@ void CAN_listen(unsigned char *buffer){
 
 void CAN_transmit(const byte *body){
    
-message.id = 0; //formatted in HEX
-message.header.rtr = 0;
-message.header.length = 8; //formatted in DEC
+    message.id = 0; //formatted in HEX
+    message.header.rtr = 0;
+    message.header.length = 8; //formatted in DEC
 
-for (int i = 0; i < 7; i++) { 
-            message.data[i]==body[i];
-        }
+    for (int i = 0; i <= 7; i++) {
+                Serial.print(body[i]);
+                Serial.print(" ");
+                message.data[i]=body[i];
+            }
 
-mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0),0);
-mcp2515_send_message(&message);
+    mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0),0);
+    mcp2515_send_message(&message);
+    
 }
 
 
