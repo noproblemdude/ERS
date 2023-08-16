@@ -16,17 +16,25 @@ void MOTOR_setup() {
   position = 0;
 }
 
-void standby(){    
+void standby(){
+    recvmsg[0] = 0;    
     CAN_listen(recvmsg);
     distribute();
 }
 
 
 void distribute(){
-    switch(recvmsg[0]) {
+
+    SERIAL_PORT_MONITOR.println(recvmsg[0]);
+
+    switch((PROCESS_IDS)recvmsg[0]) {
         case MOTOR_MOVE:
             moveMotor(recvmsg[7]);
             send(MONITOR_MOTORFEEDBACK);
+            break;
+        case MOTOR_RESET:
+            SERIAL_PORT_MONITOR.println("Motor wird zurückgesetzt");
+            moveMotor(0);
             break;
         default:
             SERIAL_PORT_MONITOR.println("Keine gültige processid");
@@ -34,12 +42,14 @@ void distribute(){
 }
 
 void moveMotor(unsigned char angle){
+    SERIAL_PORT_MONITOR.print("Motor wird auf folgende position bewegt:");
+    SERIAL_PORT_MONITOR.println(angle);
     myServo.write(180-angle);
     delay(abs(angle-position)*10);
     position = angle;
 }
 
 void send(PROCESS_IDS Pid){
-    sntmsg[0] = Pid;
+    sntmsg[0] = (char)Pid;
     CAN_transmit(sntmsg);
 }

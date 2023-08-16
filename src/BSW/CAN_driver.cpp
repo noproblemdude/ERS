@@ -40,14 +40,13 @@ void CAN_listen(unsigned char *buffer){
         if(CAN_MSGAVAIL == CAN.checkReceive()){
             SERIAL_PORT_MONITOR.println("Nachricht empfangen");
             CAN.readMsgBuf(&len, buffer);
+            
             break;
         }
         SERIAL_PORT_MONITOR.println("Wartet auf Nachricht");
         delay(100);
         time=time + 100;
     }
-
-    SERIAL_PORT_MONITOR.println("Keine nachricht empfangen");
 
 }
 
@@ -57,7 +56,4 @@ void CAN_transmit(const byte *body){
     CAN.MCP_CAN::sendMsgBuf(CANid, 0, 8, body);
     SERIAL_PORT_MONITOR.println("Nachricht versendet");
 }
-
-
-
 
