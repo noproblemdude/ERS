@@ -41,6 +41,7 @@ void MONITOR_setup(void) {
 }
 
 void standby(void){
+    recvmsg[0] = 0;
     CAN_listen(recvmsg);
     distribute();
 }
@@ -48,13 +49,15 @@ void standby(void){
 
 
 void send(PROCESS_IDS Pid){
-    sntmsg[0] = Pid;
+    sntmsg[0] = (char)Pid;
     CAN_transmit(sntmsg);
-
 }
 
 void requestMoveMotor(unsigned char deg){
-    
+
+    SERIAL_PORT_MONITOR.print("Motorbewegung wird angefragt, pos:");
+    SERIAL_PORT_MONITOR.println(deg);
+
     sntmsg[7] = deg;
     degrees = deg;
     send(MOTOR_MOVE);
@@ -63,6 +66,8 @@ void requestMoveMotor(unsigned char deg){
 }
 
 void requestMeasureRange(){
+
+    SERIAL_PORT_MONITOR.println("messung wird angefragt");
     send(SENSOR_MEASURE);
     standby();
 }
@@ -70,8 +75,7 @@ void requestMeasureRange(){
 void storerange(unsigned char deg, uint8_t range){
     
 
-
-    dataPoints[deg].x = range*(cos(degrees * (PI / 180)+PI)+2);
+    dataPoints[deg].x = range*(cos(degrees * (PI / 180)+PI)) + tft.height()/2;
     dataPoints[deg].y = range*(sin(degrees * (PI / 180)));
     
     Serial.print("das sind die Daten. Deg:");Serial.print(deg);Serial.print(" X :");Serial.print(dataPoints[deg].x);Serial.print(" Y:");Serial.println(dataPoints[deg].y);
@@ -128,7 +132,10 @@ void displayMap(void){
 }
 
 void distribute(void){
-    switch(recvmsg[0]) {
+
+    SERIAL_PORT_MONITOR.println(recvmsg[0]);
+    
+    switch((PROCESS_IDS)recvmsg[0]) {
         case MONITOR_RENDERMAP:
             SERIAL_PORT_MONITOR.println("Sensor Nachricht erhalten");
             RenderMap();
@@ -138,8 +145,13 @@ void distribute(void){
             requestMeasureRange();
             break;
         default:
-            SERIAL_PORT_MONITOR.println("Keine gültige processid");
-        }
+            
+            SERIAL_PORT_MONITOR.print("Keine gültige processid: ");
+            SERIAL_PORT_MONITOR.println(recvmsg[0]);
+
+           break;
+    }
+        
 }
 
 

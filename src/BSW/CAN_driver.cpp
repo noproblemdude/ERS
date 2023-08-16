@@ -34,38 +34,27 @@ void CAN_setup(void){
 
 void CAN_listen(unsigned char *buffer){
 
+    bool received = false;
     unsigned int time = 0;
 
-    while(time<=1000){
+    while(time<=10000){
         if(CAN_MSGAVAIL == CAN.checkReceive()){
-            SERIAL_PORT_MONITOR.println("Nachricht empfangen");
+            received = true;
             CAN.readMsgBuf(&len, buffer);
-
-            for (int i = 0; i < len; i++) {
-                SERIAL_PORT_MONITOR.print(buffer[i]); SERIAL_PORT_MONITOR.print("\t");
-            }
-
+            SERIAL_PORT_MONITOR.println("NACHRICHT ERHALTEN");
             break;
         }
-        SERIAL_PORT_MONITOR.println("Wartet auf Nachricht");
-        delay(100);
-        time=time + 100;
+        delay(10);
+        time=time + 10;
     }
 
-    SERIAL_PORT_MONITOR.println("Keine nachricht empfangen");
-
+    if(received == false){ SERIAL_PORT_MONITOR.println("KEINE NACHRICHT IN 10 SEKUNDEN ERHALTEN"); }
 }
 
 
 
 void CAN_transmit(const byte *body){
-
-    for (int i = 0; i < len; i++) {
-                SERIAL_PORT_MONITOR.print(body[i]); SERIAL_PORT_MONITOR.print("\t");
-            }
-
     CAN.MCP_CAN::sendMsgBuf(CANid, 0, 8, body);
-    SERIAL_PORT_MONITOR.println("Nachricht versendet");
 }
 
 
