@@ -2,24 +2,26 @@
 #include "Sensor.h"
 
 
-const int pingPin = 7; // Trigger Pin of Ultrasonic Sensor
-const int echoPin = 6; // Echo Pin of Ultrasonic Sensor
 
-unsigned int range;
-unsigned char degree;
-unsigned char recvmsg[8];
-unsigned char sntmsg[8];
+
+static unsigned int range;
+static unsigned char recvmsg[8];
 
 
 
-void standby(){
+
+extern void standby(void){
     CAN_listen(recvmsg);
     distribute();
 }
 
 
 
-void measureRange(){
+static void measureRange(void){
+
+    static const int pingPin = 7; // Trigger Pin of Ultrasonic Sensor
+    static const int echoPin = 6; // Echo Pin of Ultrasonic Sensor
+
     int measurements[10];
     long duration;
     for(int i =0;i<=9;i++){
@@ -45,8 +47,10 @@ void measureRange(){
 
 
 
-void send(){
+static void send(void){
 
+    static unsigned char sntmsg[8];
+    
     sntmsg[0] = (char)MONITOR_RENDERMAP;
 
     unsigned char byterange[4]; 
@@ -65,7 +69,7 @@ void send(){
 
 
 
-void distribute(){
+static void distribute(void){
     
     switch((PROCESS_IDS)recvmsg[0]) {
         case SENSOR_MEASURE:

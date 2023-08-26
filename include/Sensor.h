@@ -16,16 +16,16 @@ Triggering will happen when a can message with the relevant Processid has been r
 
 
 //Waits to receive a message, once message has been received it, it triggers the distributer
-void standby();
+extern void standby(void);
 
 //Triggers a process depending on the processID of the received message
-void distribute();
+static void distribute(void);
 
 //Sends the buffered massage with the passed processID
-void send();
+static void send(void);
 
 //access Sensor driver and genetrate the distance of an object, if one is detected
-void measureRange();
+static void measureRange(void);
 
 #endif
 

@@ -4,13 +4,13 @@
 #include "Sensor.h"
 
 
-void setup() {
+void setup(void) {
     CAN_setup();
 }
 
 
 
-void loop() {
+void loop(void) {
     standby();
 }
 

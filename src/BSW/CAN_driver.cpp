@@ -1,29 +1,30 @@
 #include "CAN_driver.h"
 
 
-tCAN message;
+static tCAN message;
 
-void CAN_setup(){
+extern void CAN_setup(void){
  
     Serial.begin(115200);
     Serial.println("CAN Write - Testing transmission of CAN Bus messages");
     delay(1000);
 
-    if(Canbus.init(CANSPEED_500))
+    if(Canbus.init(CANSPEED_500)){
     //Initialise MCP2515 CAN controller at the specified speed
     Serial.println("CAN Init ok");
+    }
     
-    else
-
+    else{
     Serial.println("Can't init CAN");
     delay(1000);
+    }
 
 
 }
 
 
 
-void CAN_listen(unsigned char *buffer){
+extern void CAN_listen(unsigned char *buffer){
 
     mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0),0);
     mcp2515_get_message(&message);
@@ -37,7 +38,7 @@ void CAN_listen(unsigned char *buffer){
 
 
 
-void CAN_transmit(const byte *body){
+extern void CAN_transmit(const byte *body){
    
     message.id = 0; //formatted in HEX
     message.header.rtr = 0;
