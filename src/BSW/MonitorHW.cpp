@@ -2,8 +2,8 @@
 #include "MonitorHW.h"
 
 
-unsigned char recvmsg[8];
-unsigned char sntmsg[8];
+static unsigned char recvmsg[8];
+static unsigned char sntmsg[8];
 static unsigned char degrees = 0;
 
 struct dataPoint
@@ -12,12 +12,12 @@ struct dataPoint
     double y;
 };
 
-struct dataPoint dataPoints[180];
+static struct dataPoint dataPoints[180];
 
 static Elegoo_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
 
-void MONITOR_setup(void) {
+extern void MONITOR_setup(void) {
     Serial.begin(115200);
     Serial.println(F("TFT LCD test"));
 
@@ -31,7 +31,7 @@ void MONITOR_setup(void) {
     
     tft.reset();
     
-    uint16_t identifier = 0x9341;
+    uint16_t identifier = 0x9341u;
 
     tft.begin(identifier);
 
@@ -40,7 +40,7 @@ void MONITOR_setup(void) {
     degrees = 0;
 }
 
-void standby(void){
+static void standby(void){
     recvmsg[0] = 0;
     CAN_listen(recvmsg);
     distribute();
@@ -48,12 +48,12 @@ void standby(void){
 
 
 
-void send(PROCESS_IDS Pid){
+extern void send(PROCESS_IDS Pid){
     sntmsg[0] = (char)Pid;
     CAN_transmit(sntmsg);
 }
 
-void requestMoveMotor(unsigned char deg){
+extern void requestMoveMotor(unsigned char deg){
 
     SERIAL_PORT_MONITOR.print("Motorbewegung wird angefragt, pos:");
     SERIAL_PORT_MONITOR.println(deg);
@@ -65,14 +65,14 @@ void requestMoveMotor(unsigned char deg){
     
 }
 
-void requestMeasureRange(){
+static void requestMeasureRange(void){
 
     SERIAL_PORT_MONITOR.println("messung wird angefragt");
     send(SENSOR_MEASURE);
     standby();
 }
 
-void storerange(unsigned char deg, uint8_t range){
+static void storerange(unsigned char deg, uint8_t range){
     
 
     dataPoints[deg].x = range*(cos(degrees * (PI / 180)+PI)) + tft.height()/2;
@@ -82,22 +82,24 @@ void storerange(unsigned char deg, uint8_t range){
 
 }
 
-bool checkOnMap(unsigned char deg){
+static  bool checkOnMap(unsigned char deg){
+
+    bool output=false;
      
     unsigned char radiuses[5] = {10,60,110,160,210};
 
     for(int i = 0; i < 4; i++){
 
-        if(radiuses[i] == deg){return true;}
+        if(radiuses[i] == deg){output=true;}
 
     }
 
-    return false;
+    return output;
 
 }
 
 
-void RenderMap(void){
+static void RenderMap(void){
 
     tft.fillCircle(dataPoints[degrees].y,dataPoints[degrees].x,3,BLACK);
     
@@ -110,7 +112,7 @@ void RenderMap(void){
 
 }
 
-void resetScreen(void){
+static void resetScreen(void){
 
     tft.fillScreen(BLACK);
     tft.fillCircle(0, tft.height()/2,10,GREEN);
@@ -121,7 +123,7 @@ void resetScreen(void){
 
 }
 
-void displayMap(void){
+static void displayMap(void){
     
     tft.fillCircle(0, tft.height()/2,10,GREEN);
     tft.drawCircle(0,tft.height()/2,60,GREEN);
@@ -131,7 +133,7 @@ void displayMap(void){
 
 }
 
-void distribute(void){
+static void distribute(void){
 
     SERIAL_PORT_MONITOR.println(recvmsg[0]);
     

@@ -2,15 +2,13 @@
 
 
 mcp2515_can CAN(SPI_CS_PIN);
-unsigned char flagRecv;
-unsigned char len;
-unsigned char buf[8];
-char str[20];
-extern unsigned char stmp[8];
 
 
-void MCP2515_ISR(void) {
-      flagRecv = 1;
+static void MCP2515_ISR(void) {
+
+    static unsigned char flagRecv;
+    flagRecv = 1;
+
 }
 
 void CAN_setup(void){
@@ -32,12 +30,13 @@ void CAN_setup(void){
 
 
 
-void CAN_listen(unsigned char *buffer){
+extern void CAN_listen(unsigned char *buffer){
 
+    static unsigned char len;
     bool received = false;
     unsigned int time = 0;
 
-    while(time<=10000){
+    while(time<=(unsigned int)10000){
         if(CAN_MSGAVAIL == CAN.checkReceive()){
             received = true;
             CAN.readMsgBuf(&len, buffer);
@@ -45,7 +44,7 @@ void CAN_listen(unsigned char *buffer){
             break;
         }
         delay(10);
-        time=time + 10;
+        time=time + (unsigned int)10;
     }
 
     if(received == false){ SERIAL_PORT_MONITOR.println("KEINE NACHRICHT IN 10 SEKUNDEN ERHALTEN"); }
@@ -54,7 +53,7 @@ void CAN_listen(unsigned char *buffer){
 
 
 void CAN_transmit(const byte *body){
-    CAN.MCP_CAN::sendMsgBuf(CANid, 0, 8, body);
+    CAN.MCP_CAN::sendMsgBuf(0, 0, 8, body);
 }
 
 
