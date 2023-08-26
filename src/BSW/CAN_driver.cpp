@@ -2,20 +2,18 @@
 
 
 mcp2515_can CAN(SPI_CS_PIN);
-unsigned char flagRecv;
-unsigned char len;
-unsigned char buf[8];
-char str[20];
+static unsigned char buf[8];
+static char str[20];
 extern unsigned char stmp[8];
 
 
-void MCP2515_ISR() {
-      flagRecv = 1;
+static void MCP2515_ISR(void) {
+    static unsigned char flagRecv;
+    flagRecv = 1;
 }
 
-void CAN_setup(){
+void CAN_setup(void){
  
-
     SERIAL_PORT_MONITOR.begin(115200);
     while (!SERIAL_PORT_MONITOR) {
         ; // wait for serial port to connect. Needed for native USB port only
@@ -27,16 +25,17 @@ void CAN_setup(){
     }
     SERIAL_PORT_MONITOR.println("CAN init ok!");
 
-
 }
 
 
 
 void CAN_listen(unsigned char *buffer){
 
+    static unsigned char len;
+
     unsigned int time = 0;
 
-    while(time<=1000){
+    while(time<=(unsigned int)1000){
         if(CAN_MSGAVAIL == CAN.checkReceive()){
             SERIAL_PORT_MONITOR.println("Nachricht empfangen");
             CAN.readMsgBuf(&len, buffer);
@@ -45,7 +44,7 @@ void CAN_listen(unsigned char *buffer){
         }
         SERIAL_PORT_MONITOR.println("Wartet auf Nachricht");
         delay(100);
-        time=time + 100;
+        time=time + (unsigned int)100;
     }
 
 }
@@ -53,7 +52,7 @@ void CAN_listen(unsigned char *buffer){
 
 
 void CAN_transmit(const byte *body){
-    CAN.MCP_CAN::sendMsgBuf(CANid, 0, 8, body);
+    CAN.MCP_CAN::sendMsgBuf(0, 0, 8, body);
     SERIAL_PORT_MONITOR.println("Nachricht versendet");
 }
 

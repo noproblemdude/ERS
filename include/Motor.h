@@ -16,19 +16,19 @@ Triggering will happen when a can message with the relevant Processid has been r
 
 
 //Setup function for the CAN Shield. Has to be called every time the ECU is booted
-void MOTOR_setup();
+extern void MOTOR_setup(void);
 
 //Waits to receive a message, once message has been received it, it triggers the distributer
-void standby();
+extern void standby(void);
 
 //Triggers a process depending on the processID of the received message
-void distribute();
+static void distribute(void);
 
 //Sends the buffered massage with the passed processID
-void send(PROCESS_IDS Pid);
+static void send(PROCESS_IDS Pid);
 
 //Accesses the feedback motor library to move the motor do desired positing as specified by the "angle" parameter 
-void moveMotor(unsigned char angle);
+static void moveMotor(unsigned char angle);
 
 
 #endif

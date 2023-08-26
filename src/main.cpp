@@ -4,17 +4,15 @@
 #include "Motor.h"
 
 
-int positiontmp = 0;
 
-
-void setup() {
+void setup(void) {
     CAN_setup();
     MOTOR_setup();
 }
 
 
 
-void loop() {
+void loop(void) {
     standby();
 }
 

@@ -8,9 +8,6 @@ global constants are defined here
 #define CONFIG_H
 
 
-const unsigned char CANid = 0;
-
-
 typedef enum {
     NULLPID1,
     MONITOR_RENDERMAP,

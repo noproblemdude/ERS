@@ -2,28 +2,28 @@
 #include "Motor.h"
 
 
-Servo myServo;
+static Servo myServo;
 
-unsigned char recvmsg[8];
-unsigned char sntmsg[8];
+static unsigned char recvmsg[8];
 
-int position;
 
-void MOTOR_setup() {
+static int position;
+
+extern void MOTOR_setup(void) {
   myServo.attach(10);
   myServo.write(180);
   delay(1000);
   position = 0;
 }
 
-void standby(){
+extern void standby(void){
     recvmsg[0] = 0;    
     CAN_listen(recvmsg);
     distribute();
 }
 
 
-void distribute(){
+static void distribute(void){
 
     SERIAL_PORT_MONITOR.println(recvmsg[0]);
 
@@ -38,18 +38,22 @@ void distribute(){
             break;
         default:
             SERIAL_PORT_MONITOR.println("Keine gültige processid");
+            break;
         }
 }
 
-void moveMotor(unsigned char angle){
+static void moveMotor(unsigned char angle){
     SERIAL_PORT_MONITOR.print("Motor wird auf folgende position bewegt:");
     SERIAL_PORT_MONITOR.println(angle);
-    myServo.write(180-angle);
-    delay(abs(angle-position)*10);
+    myServo.write((unsigned char)180-angle);
+    delay(abs(angle-(unsigned char)position)*10);
     position = angle;
 }
 
-void send(PROCESS_IDS Pid){
+static void send(PROCESS_IDS Pid){
+
+    static unsigned char sntmsg[8];
+
     sntmsg[0] = (char)Pid;
     CAN_transmit(sntmsg);
 }
